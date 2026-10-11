@@ -1,0 +1,16 @@
+{
+  "name": "karyana-store-management-system",
+  "version": "1.0.0",
+  "description": "Production POS, Inventory & Digital Khata Management System for Karyana Stores",
+  "scripts": {
+    "start": "node server/server.js",
+    "seed": "node server/seed.js",
+    "server": "node server/server.js",
+    "client": "npm --prefix client run dev",
+    "dev": "concurrently -n \"SERVER,CLIENT\" -c \"cyan,magenta\" \"npm run server\" \"npm run client\"",
+    "build": "npm --prefix server install && npm --prefix client install && npm --prefix client run build"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.6"
+  }
+}

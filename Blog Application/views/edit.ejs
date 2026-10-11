@@ -1,0 +1,40 @@
+<%- include("partials/header") %>
+
+<div class="form-box">
+  <h2 style="margin-bottom: 1.5rem;">Edit Blog</h2>
+  <form action="/blogs/<%= blog.id %>?_method=PATCH" method="POST">
+    <div class="form-group">
+      <label for="title">Blog Title</label>
+      <input type="text" id="title" name="title" value="<%= blog.title %>" required>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <div class="form-group">
+        <label for="author">Author Name</label>
+        <input type="text" id="author" name="author" value="<%= blog.author %>" required>
+      </div>
+
+      <div class="form-group">
+        <label for="category">Category</label>
+        <select id="category" name="category">
+          <option value="Tech" <%= blog.category === "Tech" ? "selected" : "" %>>Tech</option>
+          <option value="Coding" <%= blog.category === "Coding" ? "selected" : "" %>>Coding</option>
+          <option value="Life" <%= blog.category === "Life" ? "selected" : "" %>>Life</option>
+          <option value="Career" <%= blog.category === "Career" ? "selected" : "" %>>Career</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="content">Content</label>
+      <textarea id="content" name="content" rows="10" required><%= blog.content %></textarea>
+    </div>
+
+    <div class="actions">
+      <button type="submit" class="btn btn-primary">Update Blog</button>
+      <a href="/blogs/<%= blog.id %>" class="btn btn-secondary">Cancel</a>
+    </div>
+  </form>
+</div>
+
+<%- include("partials/footer") %>

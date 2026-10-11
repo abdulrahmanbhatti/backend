@@ -1,0 +1,37 @@
+<%- include("partials/header") %>
+
+<div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+  <h2>Latest Articles</h2>
+  <span><%= blogs.length %> Posts</span>
+</div>
+
+<% if (blogs.length === 0) { %>
+  <div class="card" style="text-align: center; padding: 3rem;">
+    <h3>No blogs found!</h3>
+    <p style="color: #64748b; margin: 1rem 0;">Be the first one to share something cool.</p>
+    <a href="/blogs/new" class="btn btn-primary">Create Post</a>
+  </div>
+<% } else { %>
+  <div class="blog-grid">
+    <% for(let blog of blogs) { %>
+      <article class="card">
+        <div class="card-meta">
+          <span class="badge"><%= blog.category %></span>
+          <span>By <strong><%= blog.author %></strong></span>
+          <span>•</span>
+          <span><%= blog.createdAt %></span>
+        </div>
+        <h3 class="card-title">
+          <a href="/blogs/<%= blog.id %>"><%= blog.title %></a>
+        </h3>
+        <p class="card-preview">
+          <%= blog.content.substring(0, 150) %><%= blog.content.length > 150 ? "..." : "" %>
+        </p>
+        <a href="/blogs/<%= blog.id %>" style="color: #2563eb; text-decoration: none; font-weight: 600;">Read More &rarr;</a>
+      </article>
+    <% } %>
+  </div>
+<% } %>
+
+<%- include("partials/footer") %>
+

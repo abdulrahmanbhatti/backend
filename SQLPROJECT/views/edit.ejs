@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Edit page</title>
+  </head>
+  <body>
+    <h1>About to edit username: <%= user.username %></h1>
+
+    <form method="get" action="/user/<%= user.id %>?_method=PATCH">
+      <textarea name="username"><%= user.username %></textarea>
+      <input
+        type="password"
+        name="password"
+        placeholder="Enter Your password"
+      />
+      <button>Edit</button>
+    </form>
+  </body>
+</html>

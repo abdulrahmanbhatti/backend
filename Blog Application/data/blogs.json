@@ -1,0 +1,18 @@
+[
+  {
+    "id": "045ecf12-3f82-4f9c-a060-69986486df3c",
+    "title": "good ",
+    "author": "Ali",
+    "category": "Career",
+    "content": "hello",
+    "createdAt": "Sep 3, 2026"
+  },
+  {
+    "id": "1",
+    "title": "Welcome to My Dev Blog",
+    "author": "Abdul Rahman",
+    "category": "General",
+    "content": "Yeh meri pehli blog post hai jo bagair kisi database ke sirf JSON file storage ke zariye save hui hai. Node.js ka fs module data ko persist rakhne ke liye kafi behtareen hai!",
+    "createdAt": "Sep 3, 2026"
+  }
+]
