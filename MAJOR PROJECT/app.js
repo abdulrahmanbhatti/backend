@@ -3,13 +3,16 @@ const app = express();
 const path = require("path");
 const mongoose = require("mongoose");
 const Listing = require("./models/listing.js");
+const review = require("./models/review.js");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAcync = require("./utils/wrapAsync.js");
 const ExpressError = require("./utils/ExperessError.js");
+const { listingSchema, reviewSchema } = require("./schema.js");
 app.set("views", path.join(__dirname, "views"));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.use(express.static(path.join(__dirname, "/public")));
 app.engine("ejs", ejsMate);
@@ -28,9 +31,29 @@ app.get("/", (req, res) => {
   res.send("Hi ! i am a root ");
 });
 
+const validateListing = (req, res, next) => {
+  let { error } = listingSchema.validate(req.body);
+  if (error) {
+    let errorMessage = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errorMessage);
+  } else {
+    next();
+  }
+};
+
+const validateReview = (req, res, next) => {
+  let { error } = reviewSchema.validate(req.body);
+  if (error) {
+    let errorMessage = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errorMessage);
+  } else {
+    next();
+  }
+};
+
 // app.get("/test", async (req, res) => {
 //   let sampleListing = new Listing({
-//     title: "MY Home",
+//     title: "MY Home"
 //     description: "this is my home",
 //     price: 1200,
 //     location: "Multan",
@@ -64,6 +87,7 @@ app.get("/listings/new", (req, res) => {
 
 app.post(
   "/listings",
+  validateListing,
   wrapAcync(async (req, res, next) => {
     //   let {title ,description ,image,price,location,country} = req.body;
     //   let listing = new Listing({
@@ -123,10 +147,8 @@ app.get(
 
 app.put(
   "/listings/:id",
+  validateListing,
   wrapAcync(async (req, res) => {
-    if (!req.body.listing) {
-      throw new ExpressError(400, "send valid data for listing ");
-    }
     let { id } = req.params;
     if (id && id.startsWith(":")) id = id.slice(1);
     let updatedListing = { ...req.body.listing };
@@ -152,6 +174,19 @@ app.delete(
     res.redirect("/listings");
   }),
 );
+app.post(
+  "/listings/:id/review",
+  validateReview,
+  wrapAcync(async (req, res) => {
+    let listing = await Listing.findById(req.params.id);
+    let newReview = new review(req.body.review);
+
+    listing.reviews.push(newReview);
+    await listing.save();
+    await newReview.save();
+    res.redirect("/listings");
+  }),
+);
 
 app.use((req, res, next) => {
   next(new ExpressError(404, "Page Not Found!"));
@@ -159,7 +194,7 @@ app.use((req, res, next) => {
 
 app.use((err, req, res, next) => {
   let { statusCode = 500, message = "Something went wrong!" } = err;
-  res.status(statusCode).send(message);
+  res.status(statusCode).render("error.ejs", { message, err });
 });
 
 app.listen(3000, () => {
